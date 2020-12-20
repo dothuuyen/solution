@@ -3,8 +3,16 @@
 #include<unistd.h>
 #include<dirent.h>
 #include<string.h>
+#include<signal.h>
+int stop = 0;
+void handle_sigint(int sig)
+{
+	printf("Ket thuc\n");
+	stop = 1;
+}
 int main(int argc, char *argv[])
 {
+	signal(SIGINT, handle_sigint);	
 	DIR *d;
 	d = opendir(".");
 	struct dirent *dir;	
@@ -19,8 +27,7 @@ int main(int argc, char *argv[])
 		}
 	}
 	closedir(d);
-		
-	while(1) 
+	while(stop == 0) 
 	{
 		sleep(60);	
 		d = opendir(".");
